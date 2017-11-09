@@ -11,10 +11,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import loja.daos.ProdutoDAO;
+import loja.infra.FileSaver;
 import loja.models.Produto;
 import loja.models.TipoPreco;
 import loja.validation.ProdutoValidation;
@@ -25,14 +27,17 @@ public class ProdutosController {
 
 	@Autowired
 	private ProdutoDAO produtoDao;
-	
+
+	@Autowired
+	private FileSaver fileSaver;
+
 	@InitBinder
 	public void InitBinder(WebDataBinder binder) {
 		binder.addValidators(new ProdutoValidation());
 	}
 
 	@RequestMapping("/form")
-	public ModelAndView form() {
+	public ModelAndView form(Produto produto) {
 
 		ModelAndView modelAndView = new ModelAndView("produtos/form");
 		modelAndView.addObject("tipos", TipoPreco.values());
@@ -41,12 +46,16 @@ public class ProdutosController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView gravar(@Valid Produto produto, BindingResult binding, RedirectAttributes redirectAttributes) {
-		
-		if(binding.hasErrors()) {
-			return form();
+	public ModelAndView gravar(MultipartFile sumario, @Valid Produto produto, BindingResult binding,
+			RedirectAttributes redirectAttributes) {
+
+		if (binding.hasErrors()) {
+			return form(produto);
 		}
-		
+
+		String path = fileSaver.write("arquivosSumario", sumario);
+		produto.setSumarioPath(path);
+
 		produtoDao.gravar(produto);
 
 		redirectAttributes.addFlashAttribute("sucesso", "Produto cadastrado com sucesso");
