@@ -11,6 +11,8 @@ import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import loja.controllers.HomeController;
@@ -19,7 +21,7 @@ import loja.infra.FileSaver;
 
 @EnableWebMvc
 @ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, FileSaver.class })
-public class AppWebConfiguration {
+public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public InternalResourceViewResolver internalResourceViewResolver() {
@@ -60,4 +62,11 @@ public class AppWebConfiguration {
 		return new StandardServletMultipartResolver();
 	}
 
+	public void addResourceHandlers(ResourceHandlerRegistry handlerRegistry) {
+		handlerRegistry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}
+
+	/*public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	    registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}*/
 }
