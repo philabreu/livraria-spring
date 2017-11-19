@@ -76,15 +76,13 @@ public class ProdutosController {
 	}
 
 	@RequestMapping("/detalhe/{id}")
-	public ModelAndView detalhe(@PathVariable("id")   Integer id) {
-		
+	public ModelAndView detalhe(@PathVariable("id") Integer id) {
+
 		ModelAndView modelAndView = new ModelAndView("/produtos/detalhe");
 
 		Produto produto = produtoDao.find(id);
-		modelAndView.addObject("produto",produto);
-		
+		modelAndView.addObject("produto", produto);
+
 		return modelAndView;
 	}
-
-
 }

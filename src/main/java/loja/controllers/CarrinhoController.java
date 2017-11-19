@@ -1,8 +1,10 @@
 package loja.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import loja.daos.ProdutoDAO;
@@ -13,6 +15,7 @@ import loja.models.TipoPreco;
 
 @Controller
 @RequestMapping("/carrinho")
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class CarrinhoController {
 
 	@Autowired
@@ -23,9 +26,9 @@ public class CarrinhoController {
 
 	@RequestMapping("/adicionar")
 	public ModelAndView adicionar(Integer produtoId, TipoPreco tipo) {
-		
+
 		ModelAndView modelAndView = new ModelAndView("redirect:/produtos");
-		
+
 		CarrinhoItem item = criarItem(produtoId, tipo);
 		carrinhoCompras.adicionar(item);
 
@@ -39,6 +42,5 @@ public class CarrinhoController {
 		CarrinhoItem item = new CarrinhoItem(produto, tipo);
 
 		return item;
-
 	}
 }
