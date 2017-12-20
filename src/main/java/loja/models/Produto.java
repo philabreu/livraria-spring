@@ -1,5 +1,6 @@
 package loja.models;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
@@ -29,6 +30,10 @@ public class Produto {
 	private Calendar dataLancamento;
 
 	private String sumarioPath;
+
+	public BigDecimal converterPrecoPara(TipoPreco tipo) {
+		return precos.stream().filter(preco -> preco.getTipo().equals(tipo)).findFirst().get().getValor();
+	}
 
 	public int getId() {
 		return id;
@@ -107,4 +112,5 @@ public class Produto {
 			return false;
 		return true;
 	}
+
 }

@@ -1,14 +1,24 @@
 package loja.models;
 
+import java.math.BigDecimal;
+
 public class CarrinhoItem {
 
 	private Produto produto;
 
-	private TipoPreco tipoPreco;
+	private TipoPreco tipo;
 
-	public CarrinhoItem(Produto produto, TipoPreco tipoPreco) {
+	public CarrinhoItem(Produto produto, TipoPreco tipo) {
 		this.produto = produto;
-		this.tipoPreco = tipoPreco;
+		this.tipo = tipo;
+	}
+
+	public BigDecimal getTotal(int quantidade) {
+		return this.getPreco().multiply(new BigDecimal(quantidade));
+	}
+
+	public BigDecimal getPreco() {
+		return produto.converterPrecoPara(tipo);
 	}
 
 	public Produto getProduto() {
@@ -19,12 +29,12 @@ public class CarrinhoItem {
 		this.produto = produto;
 	}
 
-	public TipoPreco getTipoPreco() {
-		return tipoPreco;
+	public TipoPreco getTipo() {
+		return tipo;
 	}
 
-	public void setTipoPreco(TipoPreco tipoPreco) {
-		this.tipoPreco = tipoPreco;
+	public void setTipo(TipoPreco tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override
@@ -32,7 +42,7 @@ public class CarrinhoItem {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((produto == null) ? 0 : produto.hashCode());
-		result = prime * result + ((tipoPreco == null) ? 0 : tipoPreco.hashCode());
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
 		return result;
 	}
 
@@ -50,7 +60,7 @@ public class CarrinhoItem {
 				return false;
 		} else if (!produto.equals(other.produto))
 			return false;
-		if (tipoPreco != other.tipoPreco)
+		if (tipo != other.tipo)
 			return false;
 		return true;
 	}
